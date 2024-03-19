@@ -2,6 +2,14 @@
 
 A Rust API Gateway built on top of pingora
 
+## Running the gateway
+
+`docker run --rm -v ./config.json:/etc/gateway/config.json -p 80:80 ghcr.io/majksa-dev/api-gateway:0`
+
+All containers you wish to be accessible through the gateway must be on the same network with the gateway.
+Configuration is done using environment variables.
+Please keep in mind that it is expected that this gateway is expected to be hidden behind a reverse proxy. That reverse proxy **must** forward client's IP using the `X-Real-IP` header.
+
 ## Gateway Configuration
 
 | **ENV**          | **Description**                                              | **Default**              |
