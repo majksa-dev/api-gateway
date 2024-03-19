@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/majksa-dev/api-gateway/compare/v0.1.1...v0.1.2) (2024-03-19)
+
+
+### Bug Fixes
+
+* building the app ([afec1ae](https://github.com/majksa-dev/api-gateway/commit/afec1aeeb067325d9021434d04d434c114bb833a))
+
 ## [0.1.1](https://github.com/majksa-dev/api-gateway/compare/v0.1.0...v0.1.1) (2024-03-19)
 
 
