@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/majksa-dev/api-gateway/compare/v0.1.2...v0.1.3) (2024-03-19)
+
+
+### Bug Fixes
+
+* docker build ([1996921](https://github.com/majksa-dev/api-gateway/commit/199692104f2d4b1017d7ca48c988586c50fa0683))
+
 ## [0.1.2](https://github.com/majksa-dev/api-gateway/compare/v0.1.1...v0.1.2) (2024-03-19)
 
 
