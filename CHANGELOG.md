@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/majksa-dev/api-gateway/compare/v0.1.3...v0.1.4) (2024-03-19)
+
+
+### Bug Fixes
+
+* project name ([fb4a6f5](https://github.com/majksa-dev/api-gateway/commit/fb4a6f521468043c01b405bcad36c2784aacd1d1))
+
 ## [0.1.3](https://github.com/majksa-dev/api-gateway/compare/v0.1.2...v0.1.3) (2024-03-19)
 
 
