@@ -1,3 +1,4 @@
+mod app;
 mod env;
 mod http;
 mod utils;
