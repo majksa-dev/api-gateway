@@ -1,4 +1,4 @@
-# api-gateway
+# Api Gateway
 
 A Rust API Gateway built on top of pingora
 
