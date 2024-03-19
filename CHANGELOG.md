@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/majksa-dev/api-gateway/compare/v0.1.4...v0.1.5) (2024-03-19)
+
+
+### Bug Fixes
+
+* limit platforms ([6fe2528](https://github.com/majksa-dev/api-gateway/commit/6fe2528e497fe604379c8aefaa4f9ccfdba7852a))
+
 ## [0.1.4](https://github.com/majksa-dev/api-gateway/compare/v0.1.3...v0.1.4) (2024-03-19)
 
 
