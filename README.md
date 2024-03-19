@@ -1,6 +1,6 @@
-# rust-backend
+# api-gateway
 
-A Rust GraphQL backend template repository
+A Rust API Gateway built on top of pingora
 
 Configuration:
 | **ENV** | **Description** | **Default** |
