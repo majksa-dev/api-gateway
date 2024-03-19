@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/majksa-dev/api-gateway/compare/v0.1.0...v0.1.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* allow writing packages ([90fe9d3](https://github.com/majksa-dev/api-gateway/commit/90fe9d3f62b1ca824d92963ba3927c75c31945a1))
+
 ## 0.1.0 (2024-03-19)
 
 
