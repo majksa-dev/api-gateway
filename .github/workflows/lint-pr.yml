@@ -1,0 +1,15 @@
+name: "Lint PR"
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+permissions:
+  pull-requests: read
+
+jobs:
+  lint-pr:
+    uses: majksa-actions/workflows/.github/workflows/lint-pr.yml@v1

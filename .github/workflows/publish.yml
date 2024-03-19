@@ -1,0 +1,13 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - "**"
+
+permissions:
+  contents: read
+
+jobs:
+  cargo:
+    uses: majksa-actions/workflows/.github/workflows/docker-build-and-publish.yml@v1

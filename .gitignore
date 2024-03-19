@@ -1,0 +1,8 @@
+# Added by cargo
+
+/target
+/redis
+
+.env
+index.html
+config.json
