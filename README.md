@@ -9,6 +9,7 @@ A Rust API Gateway built on top of pingora
 All containers you wish to be accessible through the gateway must be on the same network with the gateway.
 Configuration is done using environment variables.
 Please keep in mind that it is expected that this gateway is expected to be hidden behind a reverse proxy. That reverse proxy **must** forward client's IP using the `X-Real-IP` header.
+The application is selected based on request header `Host` -- `Host: app` will select application with key `app`.
 
 ## Gateway Configuration
 
