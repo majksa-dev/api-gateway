@@ -91,7 +91,10 @@
 		"Endpoint": {
 			"type": "object",
 			"properties": {
-				"path": { "type": "string" },
+				"path": {
+					"type": "string",
+					"format": "regex"
+				},
 				"id": { "type": "string" },
 				"method": {
 					"enum": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
