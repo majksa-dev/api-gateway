@@ -1,0 +1,14 @@
+/target
+/redis
+/.github
+
+
+.env
+index.html
+config.json
+CHANGELOG.md
+config.schema.json
+Dockerfile
+LICENSE
+README.md
+
