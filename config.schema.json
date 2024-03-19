@@ -1,0 +1,136 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"apps": {
+			"type": "object",
+			"additionalProperties": { "$ref": "#/definitions/App" }
+		}
+	},
+	"required": ["apps"],
+	"definitions": {
+		"App": {
+			"type": "object",
+			"properties": {
+				"upstream": { "$ref": "#/definitions/Upstream" },
+				"auth": { "$ref": "#/definitions/Auth" },
+				"endpoints": {
+					"type": "array",
+					"items": { "$ref": "#/definitions/Endpoint" }
+				}
+			},
+			"required": ["upstream", "auth", "endpoints"]
+		},
+		"Upstream": {
+			"type": "object",
+			"properties": {
+				"host": {
+					"type": "string",
+					"format": "hostname"
+				},
+				"port": {
+					"type": "integer",
+					"minimum": 1,
+					"maximum": 65535,
+					"default": 80
+				},
+				"tls": {
+					"type": "boolean",
+					"default": false
+				}
+			},
+			"required": ["host"]
+		},
+		"Auth": {
+			"type": "array",
+			"items": [
+				{
+					"type": "object",
+					"properties": {
+						"token": {
+							"type": "string"
+						},
+						"origins": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"format": "uri"
+							},
+							"minItems": 1
+						},
+						"quota": {
+							"oneOf": [
+								{
+									"type": "object",
+									"properties": {
+										"total": {
+											"oneOf": [
+												{ "$ref": "#/definitions/Quota" },
+												{ "type": "null" }
+											],
+											"default": null
+										},
+										"user": {
+											"oneOf": [
+												{ "$ref": "#/definitions/Quota" },
+												{ "type": "null" }
+											],
+											"default": null
+										}
+									}
+								},
+								{ "type": "null" }
+							],
+							"default": null
+						}
+					},
+					"required": ["token", "origins"]
+				}
+			]
+		},
+		"Endpoint": {
+			"type": "object",
+			"properties": {
+				"path": { "type": "string" },
+				"id": { "type": "string" },
+				"method": {
+					"enum": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+				},
+				"headers": {
+					"type": "array",
+					"items": { "type": "string" },
+					"default": []
+				},
+				"rate-limit": {
+					"oneOf": [{ "$ref": "#/definitions/Quota" }, { "type": "null" }],
+					"default": null
+				},
+				"websocket": {
+					"type": "boolean",
+					"default": false
+				}
+			},
+			"required": ["path", "id", "method"]
+		},
+		"Quota": {
+			"type": "object",
+			"properties": {
+				"amount": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"interval": {
+					"type": "object",
+					"properties": {
+						"amount": { "type": "integer" },
+						"unit": {
+							"enum": ["seconds", "minutes", "hours", "days"]
+						}
+					},
+					"required": ["amount", "unit"]
+				}
+			},
+			"required": ["amount", "interval"]
+		}
+	}
+}

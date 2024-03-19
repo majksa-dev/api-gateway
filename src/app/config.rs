@@ -71,6 +71,7 @@ pub struct Upstream {
 pub struct Auth {
     pub token: String,
     pub origins: Vec<String>,
+    pub quota: Option<Quota>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -132,10 +133,10 @@ struct EndpointRaw {
     path: String,
     id: String,
     method: Method,
-    headers: Vec<String>,
+    headers: Option<Vec<String>>,
     #[serde(rename = "rate-limit")]
     rate_limit: Option<Frequency>,
-    websocket: bool,
+    websocket: Option<bool>,
 }
 
 impl<'de> Deserialize<'de> for Endpoint {
@@ -148,9 +149,9 @@ impl<'de> Deserialize<'de> for Endpoint {
             path: Regex::new(&e.path).unwrap(),
             id: e.id,
             method: e.method.to_pingora(),
-            headers: e.headers,
+            headers: e.headers.unwrap_or_else(Vec::new),
             rate_limit: e.rate_limit,
-            websocket: e.websocket,
+            websocket: e.websocket.unwrap_or(false),
         })
     }
 }
