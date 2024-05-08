@@ -43,7 +43,7 @@ pub struct Time {
 }
 
 impl Time {
-    pub fn to_seconds(&self) -> u32 {
+    pub fn _to_seconds(&self) -> u32 {
         self.unit._to_seconds(self.amount)
     }
 
