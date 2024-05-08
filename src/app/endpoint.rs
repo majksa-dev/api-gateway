@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use log::error;
+use log::{debug, error};
 use pingora::{
     http::{Method, RequestHeader, ResponseHeader, StatusCode},
     proxy::Session,
@@ -46,7 +46,9 @@ impl Endpoint {
 impl RequestHandler for Endpoint {
     async fn handle_request(&self, session: &mut Session, ctx: &mut CTX) -> Option<StatusCode> {
         match session.preflight(&self.0.headers).await {
-            Ok(false) => {}
+            Ok(false) => {
+                debug!("Request is not a preflight request");
+            }
             Ok(true) => return Some(StatusCode::OK),
             Err(e) => {
                 error!("Error when handling preflight: {}", e);
@@ -54,6 +56,7 @@ impl RequestHandler for Endpoint {
             }
         };
         if let Err(status) = ctx.connect().to_status_code() {
+            debug!("Could not connect to redis: {}", status);
             return Some(status);
         }
 
@@ -61,9 +64,11 @@ impl RequestHandler for Endpoint {
             let rate_limiter = Arc::new(RateLimiter::new(frequency.clone()));
             ctx.set_rate_limiter(&rate_limiter);
             if let Some(status) = rate_limiter.handle_request(session, ctx).await {
+                debug!("Rate limit exceeded: {}", status);
                 return Some(status);
             }
         }
+        debug!("All checks passed");
         None
     }
 

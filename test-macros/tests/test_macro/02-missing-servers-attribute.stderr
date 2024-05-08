@@ -1,0 +1,7 @@
+error: servers attribute not found
+  --> tests/test_macro/02-missing-servers-attribute.rs:32:1
+   |
+32 | #[helper::test(config = single_server_config)]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this error originates in the attribute macro `helper::test` (in Nightly builds, run with -Z macro-backtrace for more info)

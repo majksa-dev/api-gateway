@@ -1,0 +1,7 @@
+error: config attribute not found
+ --> tests/test_macro/03-missing-config-attribute.rs:1:1
+  |
+1 | #[helper::test(servers = 1)]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the attribute macro `helper::test` (in Nightly builds, run with -Z macro-backtrace for more info)

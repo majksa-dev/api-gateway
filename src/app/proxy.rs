@@ -1,6 +1,6 @@
 use std::{net::ToSocketAddrs, sync::Arc};
 
-use log::error;
+use log::{debug, error};
 use pingora::{
     http::{RequestHeader, ResponseHeader, StatusCode},
     proxy::Session,
@@ -60,12 +60,14 @@ impl RequestHandler for AppProxy {
     async fn handle_request(&self, session: &mut Session, ctx: &mut CTX) -> Option<StatusCode> {
         let status = match self.get_endpoint(session.req_header()) {
             Some(endpoint) => {
+                debug!("Selected endpoint: {}", endpoint.id());
                 ctx.select_endpoint(&endpoint);
                 endpoint.handle_request(session, ctx).await
             }
             None => Some(StatusCode::NOT_FOUND),
         };
         if status.is_some() {
+            debug!("Responding with status: {:?}", status);
             return status;
         }
         if !session.check_cors(
@@ -76,6 +78,7 @@ impl RequestHandler for AppProxy {
                 .map(|auth| (&auth.token, &auth.origins))
                 .collect(),
         ) {
+            debug!("Unauthorized request");
             return Some(StatusCode::UNAUTHORIZED);
         }
         None

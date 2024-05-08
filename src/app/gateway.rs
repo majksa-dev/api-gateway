@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use log::warn;
+use log::{debug, warn};
 use pingora::http::{RequestHeader, ResponseHeader, StatusCode};
 use std::collections::HashMap;
 use std::fs;
@@ -79,6 +79,7 @@ impl ProxyHttp for Gateway {
     async fn request_filter(&self, session: &mut Session, ctx: &mut Self::CTX) -> Result<bool> {
         let response = match self.get_proxy(session.req_header()) {
             Ok(app) => {
+                debug!("Selected app: {}", app.config.name);
                 ctx.select_app(&app);
                 app.handle_request(session, ctx).await
             }
