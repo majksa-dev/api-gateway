@@ -1,4 +1,4 @@
-use gateway::cors;
+use gateway::{cache, cors, rate_limit};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -42,5 +42,29 @@ impl From<Apps> for cors::Config {
                 .map(|(name, app)| (name, app.into()))
                 .collect(),
         }
+    }
+}
+
+impl From<Apps> for rate_limit::Config {
+    fn from(value: Apps) -> Self {
+        Self::new(
+            value
+                .apps
+                .into_iter()
+                .map(|(name, app)| (name, app.into()))
+                .collect(),
+        )
+    }
+}
+
+impl From<Apps> for cache::Config {
+    fn from(value: Apps) -> Self {
+        Self::new(
+            value
+                .apps
+                .into_iter()
+                .map(|(name, app)| (name, app.into()))
+                .collect(),
+        )
     }
 }

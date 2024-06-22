@@ -3,7 +3,6 @@ use essentials::{debug, error};
 mod app;
 mod config;
 mod env;
-mod utils;
 
 #[tokio::main]
 async fn main() {

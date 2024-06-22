@@ -3,11 +3,11 @@ use std::{
     path::Path,
 };
 
-use crate::config::{app::AppConfig, apps::Apps};
+use crate::config::apps::Apps;
 use ::gateway::{builder, Server, TcpOrigin};
 use bb8_redis::{bb8::Pool, RedisConnectionManager};
 use essentials::error;
-use gateway::{cors, Request};
+use gateway::{cache, cors, http::HeaderMapExt, rate_limit, ParamRouter, Request};
 use http::header;
 use tokio::fs;
 
@@ -52,26 +52,9 @@ fn create_origin(config: &Apps) -> TcpOrigin {
 
 fn peer_key_from_host() -> impl Fn(&Request) -> Option<String> + Send + Sync + 'static {
     |req: &Request| {
-        req.headers
-            .get(header::HOST)
+        req.header(header::HOST)
             .and_then(|host| host.to_str().ok())
             .map(|host| host.to_string())
-    }
-}
-
-fn endpoint_key_from_host(
-    config: AppConfig,
-) -> impl Fn(&Request) -> Option<String> + Send + Sync + 'static {
-    let endpoints = config
-        .endpoints
-        .into_iter()
-        .map(|endpoint| (endpoint.id, endpoint.path))
-        .collect::<Vec<_>>();
-    move |req: &Request| {
-        endpoints
-            .iter()
-            .find(|(_, path)| path.is_match(&req.path))
-            .map(|(id, _)| id.clone())
     }
 }
 
@@ -83,9 +66,31 @@ pub async fn build(env: Env) -> Result<Server> {
         .with_app_port(env.port.unwrap_or(80))
         .with_health_check_port(env.healthcheck_port.unwrap_or(9000))
         .with_host(env.host.unwrap_or(IpAddr::from([127, 0, 0, 1])))
-        .register_middleware(1, cors::Middleware(config.clone().into()));
+        .register_middleware(1, cors::Middleware::new(config.clone().into()))
+        .register_middleware(
+            2,
+            rate_limit::Middleware::new(
+                config.clone().into(),
+                rate_limit::RedisDatastore::new(redis_rate_limiter),
+            ),
+        )
+        .register_middleware(
+            3,
+            cache::Middleware::new(
+                config.clone().into(),
+                cache::RedisDatastore::new(redis_cache),
+            ),
+        );
     for (peer, config) in config.apps.clone().into_iter() {
-        builder = builder.register_peer(peer, endpoint_key_from_host(config));
+        let mut router = ParamRouter::new();
+        for endpoint in config.endpoints.iter() {
+            router = router.add_route(
+                endpoint.method.clone().into(),
+                endpoint.path.clone(),
+                endpoint.id.clone(),
+            );
+        }
+        builder = builder.register_peer(peer, router);
     }
     Ok(builder.build())
 }
