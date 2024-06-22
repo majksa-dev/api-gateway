@@ -12,7 +12,11 @@ use testing_utils::{
         fixture::{FileTouch, FileWriteStr, PathChild},
     },
     get_random_ports, macros as utils, server_cmd, surf,
-    testcontainers::{core::WaitFor, runners::AsyncRunner, ContainerAsync, GenericImage},
+    testcontainers::{
+        core::{ContainerPort, WaitFor},
+        runners::AsyncRunner,
+        ContainerAsync, GenericImage,
+    },
 };
 use wiremock::{
     matchers::{method, path},
@@ -35,10 +39,9 @@ fn single_server_config(ports: &[u16]) -> serde_json::Value {
                 ],
                 "endpoints": [
                     {
-                        "path": "^/hello$",
+                        "path": "/hello",
                         "id": "hello",
-                        "method": "GET",
-                        "headers": []
+                        "method": "GET"
                     }
                 ]
             }
@@ -49,20 +52,28 @@ fn single_server_config(ports: &[u16]) -> serde_json::Value {
 struct Context {
     cmd: Child,
     app: u16,
-    redis: ContainerAsync<GenericImage>,
+    redis_cache: ContainerAsync<GenericImage>,
+    redis_rate_limiter: ContainerAsync<GenericImage>,
     _mock_server: MockServer,
 }
 
 async fn before_each() -> Context {
     env::set_var("RUST_LOG", "debug");
     essentials::install();
-    let redis: ContainerAsync<GenericImage> = GenericImage::new("redis", "7.2.4")
-        .with_exposed_port(6379)
+    let redis_cache: ContainerAsync<GenericImage> = GenericImage::new("redis", "7.2.4")
+        .with_exposed_port(ContainerPort::Tcp(6379))
         .with_wait_for(WaitFor::message_on_stdout("Ready to accept connections"))
         .start()
         .await
         .expect("Redis started");
-    let redis_port = redis.get_host_port_ipv4(6379).await.unwrap();
+    let redis_cache_port = redis_cache.get_host_port_ipv4(6379).await.unwrap();
+    let redis_rate_limiter: ContainerAsync<GenericImage> = GenericImage::new("redis", "7.2.4")
+        .with_exposed_port(ContainerPort::Tcp(6379))
+        .with_wait_for(WaitFor::message_on_stdout("Ready to accept connections"))
+        .start()
+        .await
+        .expect("Redis started");
+    let redis_rate_limiter_port = redis_rate_limiter.get_host_port_ipv4(6379).await.unwrap();
     let listener = TcpListener::bind(SocketAddr::from(([127, 0, 0, 1], 0))).unwrap();
     let origin = listener.local_addr().unwrap().port();
     let mock_server = MockServer::builder().listener(listener).start().await;
@@ -85,10 +96,17 @@ async fn before_each() -> Context {
         .env("PORT", ports[0].to_string())
         .env("HEALTHCHECK_PORT", ports[1].to_string())
         .env("CONFIG_FILE", input_file.path())
-        .env("REDIS_URL", format!("redis://localhost:{}", redis_port))
+        .env(
+            "REDIS_RATE_LIMITER_URL",
+            format!("redis://localhost:{}", redis_rate_limiter_port),
+        )
+        .env(
+            "REDIS_CACHE_URL",
+            format!("redis://localhost:{}", redis_cache_port),
+        )
         .spawn()
         .unwrap();
-    for _ in 0..10 {
+    for _ in 0..20 {
         if let Ok(status) = surf::get(format!("http://localhost:{}", &ports[1].to_string()))
             .await
             .map(|res| res.status())
@@ -98,13 +116,14 @@ async fn before_each() -> Context {
                 return Context {
                     cmd: app,
                     app: ports[0],
-                    redis,
+                    redis_cache,
+                    redis_rate_limiter,
                     _mock_server: mock_server,
                 };
             }
         }
         // Sleep for 5 seconds
-        std::thread::sleep(std::time::Duration::from_secs(1));
+        std::thread::sleep(std::time::Duration::from_secs(5));
     }
     panic!("Could not start the server");
 }
@@ -112,7 +131,14 @@ async fn before_each() -> Context {
 async fn after_each(mut ctx: Context) {
     ctx.cmd.kill().unwrap();
     ctx.cmd.wait().unwrap();
-    ctx.redis.stop().await.expect("Redis could not be stopped");
+    ctx.redis_cache
+        .stop()
+        .await
+        .expect("Redis could not be stopped");
+    ctx.redis_rate_limiter
+        .stop()
+        .await
+        .expect("Redis could not be stopped");
 }
 
 #[utils::test(setup = before_each, teardown = after_each)]
@@ -174,7 +200,7 @@ async fn should_fail_when_calling_valid_endpoint_without_origin(ctx: Context) ->
         .await
         .unwrap()
         .status();
-    assert_eq!(status as u16, 401);
+    assert_eq!(status as u16, 400);
     ctx
 }
 
@@ -188,6 +214,6 @@ async fn should_fail_when_calling_invalid_endpoint(ctx: Context) -> Context {
         .await
         .unwrap()
         .status();
-    assert_eq!(status as u16, 404);
+    assert_eq!(status as u16, 403);
     ctx
 }
