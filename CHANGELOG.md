@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.2.0](https://github.com/majksa-dev/api-gateway/compare/v0.1.5...v0.2.0) (2024-06-23)
+
+
+### Features
+
+* add caching middleware ([8d34046](https://github.com/majksa-dev/api-gateway/commit/8d3404613618d1abfaf7ded6b04352b5627575cb))
+* implement custom server ([457076b](https://github.com/majksa-dev/api-gateway/commit/457076b8d92d4a2e3df535d927abb335ea2fad1b))
+
+
+### Bug Fixes
+
+* **deps:** bump async-trait from 0.1.78 to 0.1.80 ([cf8dd78](https://github.com/majksa-dev/api-gateway/commit/cf8dd78f0abbe40ecfc46603411ffb8e296121e5))
+* **deps:** bump chrono from 0.4.35 to 0.4.38 ([40c639f](https://github.com/majksa-dev/api-gateway/commit/40c639fcc09316ad5c8d37197b4098979a30c6e4))
+* **deps:** bump redis from 0.25.2 to 0.25.4 ([0afa3a8](https://github.com/majksa-dev/api-gateway/commit/0afa3a8f1c6a505899ceaca61706c0c9d02ade8f))
+* **deps:** bump regex from 1.10.3 to 1.10.5 ([5989852](https://github.com/majksa-dev/api-gateway/commit/5989852aa7bc1ad2f76406cbf4af59e68dd03126))
+* **deps:** bump serde_json from 1.0.114 to 1.0.117 ([f013305](https://github.com/majksa-dev/api-gateway/commit/f013305b3c8c5968cfddb1c61172c79f8dba9324))
+
 ## [0.1.5](https://github.com/majksa-dev/api-gateway/compare/v0.1.4...v0.1.5) (2024-03-19)
 
 
