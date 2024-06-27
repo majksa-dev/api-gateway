@@ -27,6 +27,6 @@ anyhow = "1.0.86"
 url = "2.5.2"
 
 [dev-dependencies]
-testing-utils = { tag = "0.1.4", git = "https://github.com/majksa-dev/rust-testing-utils" }
+testing-utils = { tag = "0.1.5", git = "https://github.com/majksa-dev/rust-testing-utils" }
 pretty_assertions = "1.4.0"
 wiremock = "0.6.0"
