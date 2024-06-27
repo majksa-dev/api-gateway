@@ -4193,8 +4193,8 @@ checksum = "3369f5ac52d5eb6ab48c6b4ffdc8efbcad6b89c765749064ba298f2c68a16a76"
 
 [[package]]
 name = "test-macros"
-version = "0.1.4"
-source = "git+https://github.com/majksa-dev/rust-testing-utils?tag=0.1.4#a897bc050cf87baa1b9a9f5c3ef8ebfb7c8d8daf"
+version = "0.1.5"
+source = "git+https://github.com/majksa-dev/rust-testing-utils?tag=0.1.5#8ee4e3bfa3401c4bcd0982ffe3bf2c904bbe70ac"
 dependencies = [
  "assert_fs",
  "chrono",
@@ -4243,8 +4243,8 @@ dependencies = [
 
 [[package]]
 name = "testing-utils"
-version = "0.1.4"
-source = "git+https://github.com/majksa-dev/rust-testing-utils?tag=0.1.4#a897bc050cf87baa1b9a9f5c3ef8ebfb7c8d8daf"
+version = "0.1.5"
+source = "git+https://github.com/majksa-dev/rust-testing-utils?tag=0.1.5#8ee4e3bfa3401c4bcd0982ffe3bf2c904bbe70ac"
 dependencies = [
  "assert_fs",
  "chrono",
