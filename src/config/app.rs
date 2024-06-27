@@ -1,23 +1,34 @@
-use gateway::{cache, cors, rate_limit};
+use std::collections::HashMap;
+
+use gateway::{auth, cache, cors, rate_limit};
 use serde::Deserialize;
 
-use super::{auth::Auth, endpoint::Endpoint, quota::Quota, upstream::Upstream};
+use super::{
+    auth::{basic, jwt, Auth},
+    endpoint::Endpoint,
+    quota::Quota,
+    upstream::Upstream,
+};
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct AppConfigRaw {
     pub upstream: Upstream,
-    pub auth: Vec<Auth>,
+    pub auth: Option<Vec<Auth>>,
     pub endpoints: Vec<Endpoint>,
     pub quota: Option<Quota>,
+    pub jwt: Option<Vec<jwt::Auth>>,
+    pub basic: Option<basic::Auth>,
 }
 
 #[derive(Debug, Clone)]
 pub struct AppConfig {
     pub name: String,
     pub upstream: Upstream,
-    pub auth: Vec<Auth>,
+    pub auth: Option<Vec<Auth>>,
     pub endpoints: Vec<Endpoint>,
     pub quota: Option<Quota>,
+    pub jwt: Option<Vec<jwt::Auth>>,
+    pub basic: Option<basic::Auth>,
 }
 
 impl AppConfig {
@@ -28,45 +39,68 @@ impl AppConfig {
             auth: data.auth,
             endpoints: data.endpoints,
             quota: data.quota,
+            jwt: data.jwt,
+            basic: data.basic,
         }
     }
 }
 
-impl From<AppConfig> for cors::AppConfig {
-    fn from(value: AppConfig) -> Self {
-        Self::new(value.auth.into_iter().map(Auth::into).collect())
+impl From<&AppConfig> for cors::config::AppConfig {
+    fn from(value: &AppConfig) -> Self {
+        Self::new(
+            value
+                .auth
+                .clone()
+                .unwrap_or_default()
+                .iter()
+                .map(cors::config::Auth::from)
+                .collect(),
+        )
     }
 }
 
-impl From<AppConfig> for rate_limit::AppConfig {
-    fn from(value: AppConfig) -> Self {
-        Self::new(
-            rate_limit::Rules {
-                quota: value.quota.map(Quota::into),
-                endpoints: value
-                    .endpoints
+impl From<&AppConfig>
+    for (
+        rate_limit::config::Rules,
+        HashMap<String, rate_limit::config::Rules>,
+    )
+{
+    fn from(value: &AppConfig) -> Self {
+        (
+            rate_limit::config::Rules::new(
+                value.quota.as_ref().map(rate_limit::config::Quota::from),
+                value
+                    .auth
+                    .clone()
+                    .unwrap_or_default()
                     .into_iter()
-                    .filter_map(|endpoint| {
-                        if let Some(quota) = endpoint.quota {
-                            Some((endpoint.id, quota.into()))
-                        } else {
-                            None
-                        }
+                    .filter_map(|auth| {
+                        auth.quota
+                            .as_ref()
+                            .map(rate_limit::config::Quota::from)
+                            .map(|quota| (auth.token, quota))
                     })
                     .collect(),
-            },
+            ),
             value
-                .auth
-                .into_iter()
-                .map(|auth| {
+                .endpoints
+                .iter()
+                .map(|endpoint| {
                     (
-                        auth.token,
-                        rate_limit::Rules::new(
-                            auth.quota.map(Quota::into),
-                            auth.endpoints
+                        endpoint.id.clone(),
+                        rate_limit::config::Rules::new(
+                            endpoint.quota.as_ref().map(rate_limit::config::Quota::from),
+                            endpoint
+                                .auth
+                                .clone()
                                 .unwrap_or_default()
                                 .into_iter()
-                                .map(|(id, quota)| (id, quota.into()))
+                                .filter_map(|auth| {
+                                    auth.quota
+                                        .as_ref()
+                                        .map(rate_limit::config::Quota::from)
+                                        .map(|quota| (auth.token, quota))
+                                })
                                 .collect(),
                         ),
                     )
@@ -76,20 +110,23 @@ impl From<AppConfig> for rate_limit::AppConfig {
     }
 }
 
-impl From<AppConfig> for cache::AppConfig {
-    fn from(value: AppConfig) -> Self {
-        Self::new(
-            value
-                .endpoints
-                .into_iter()
-                .filter_map(|endpoint| {
-                    if let Some(cache) = endpoint.cache {
-                        Some((endpoint.id, cache.into()))
-                    } else {
-                        None
-                    }
-                })
-                .collect(),
-        )
+impl From<&AppConfig> for HashMap<String, cache::config::Endpoint> {
+    fn from(value: &AppConfig) -> Self {
+        value
+            .endpoints
+            .iter()
+            .filter_map(|endpoint| {
+                endpoint
+                    .cache
+                    .as_ref()
+                    .map(|cache| (endpoint.id.clone(), cache::config::Endpoint::from(cache)))
+            })
+            .collect()
+    }
+}
+
+impl From<&AppConfig> for Option<auth::basic::config::Auth> {
+    fn from(value: &AppConfig) -> Self {
+        Some(auth::basic::config::Auth::from(value.basic.as_ref()?))
     }
 }

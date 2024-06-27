@@ -1,4 +1,4 @@
-use gateway::{cache, cors, rate_limit};
+use gateway::{auth, cache, cors, rate_limit};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -33,38 +33,59 @@ impl AppsRaw {
     }
 }
 
-impl From<Apps> for cors::Config {
-    fn from(value: Apps) -> Self {
-        Self {
-            config: value
-                .apps
-                .into_iter()
-                .map(|(name, app)| (name, app.into()))
-                .collect(),
-        }
+impl From<&Apps> for cors::Builder {
+    fn from(value: &Apps) -> Self {
+        value
+            .apps
+            .iter()
+            .map(|(name, app)| (name.clone(), app.into()))
+            .collect()
     }
 }
 
-impl From<Apps> for rate_limit::Config {
-    fn from(value: Apps) -> Self {
-        Self::new(
-            value
-                .apps
-                .into_iter()
-                .map(|(name, app)| (name, app.into()))
-                .collect(),
-        )
+impl From<&Apps> for rate_limit::Builder {
+    fn from(value: &Apps) -> Self {
+        value
+            .apps
+            .iter()
+            .map(|(name, app)| (name.clone(), app.into()))
+            .collect()
     }
 }
 
-impl From<Apps> for cache::Config {
-    fn from(value: Apps) -> Self {
-        Self::new(
-            value
-                .apps
-                .into_iter()
-                .map(|(name, app)| (name, app.into()))
-                .collect(),
-        )
+impl From<&Apps> for cache::Builder {
+    fn from(value: &Apps) -> Self {
+        value
+            .apps
+            .iter()
+            .map(|(name, app)| {
+                (
+                    name.clone(),
+                    HashMap::<String, cache::config::Endpoint>::from(app),
+                )
+            })
+            .collect()
+    }
+}
+
+impl From<&Apps> for auth::basic::Builder {
+    fn from(value: &Apps) -> Self {
+        value
+            .apps
+            .iter()
+            .filter_map(|(name, app)| {
+                Into::<Option<auth::basic::config::Auth>>::into(app).map(|app| (name.clone(), app))
+            })
+            .collect()
+    }
+}
+
+impl From<&Apps> for auth::jwt::Builder {
+    fn from(value: &Apps) -> Self {
+        value
+            .apps
+            .iter()
+            .map(|(name, app)| (name.clone(), app.into()))
+            .collect()
     }
 }

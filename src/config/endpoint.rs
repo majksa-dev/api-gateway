@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::{cache::Cache, method::Method, quota::Quota};
+use super::{auth::EndpointAuth, cache::Cache, method::Method, quota::Quota};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Endpoint {
@@ -9,4 +9,5 @@ pub struct Endpoint {
     pub quota: Option<Quota>,
     pub cache: Option<Cache>,
     pub method: Method,
+    pub auth: Option<Vec<EndpointAuth>>,
 }

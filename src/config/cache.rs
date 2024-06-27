@@ -8,11 +8,11 @@ pub struct Cache {
     pub vary_headers: Option<Vec<String>>,
 }
 
-impl From<Cache> for cache::Endpoint {
-    fn from(value: Cache) -> Self {
+impl From<&Cache> for cache::config::Endpoint {
+    fn from(value: &Cache) -> Self {
         Self::new(
-            value.expires_in.into(),
-            value.vary_headers.unwrap_or_default(),
+            value.expires_in.clone().into(),
+            value.vary_headers.clone().unwrap_or_default(),
         )
     }
 }
