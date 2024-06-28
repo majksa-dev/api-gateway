@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.3.0](https://github.com/majksa-dev/api-gateway/compare/v0.2.0...v0.3.0) (2024-06-28)
+
+
+### Features
+
+* add auth middlewares, implement gateway config using builders ([5e0e38c](https://github.com/majksa-dev/api-gateway/commit/5e0e38c872ade1aecff5ca24be44160f9cebc13c))
+
+
+### Bug Fixes
+
+* **deps:** bump serde_json from 1.0.117 to 1.0.118 ([4ff69ab](https://github.com/majksa-dev/api-gateway/commit/4ff69ab6e48860944904ee21e22bc570e74c7a71))
+* **deps:** upgrade gateway from 0.5.3 to 0.5.4 ([9a8ba4a](https://github.com/majksa-dev/api-gateway/commit/9a8ba4acbda069d3bc5ee8fe65763fa13d721838))
+* **jwt:** setup auth config correctly ([5560f18](https://github.com/majksa-dev/api-gateway/commit/5560f1841cec9938195bda7d5990e03850973379))
+* run cargo build before tests ([3a01cd7](https://github.com/majksa-dev/api-gateway/commit/3a01cd71c2415094fbf75236024480dd6c63bd6b))
+
 ## [0.2.0](https://github.com/majksa-dev/api-gateway/compare/v0.1.5...v0.2.0) (2024-06-23)
 
 
