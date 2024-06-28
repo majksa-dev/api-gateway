@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.2](https://github.com/majksa-dev/api-gateway/compare/v0.3.1...v0.3.2) (2024-06-28)
+
+
+### Bug Fixes
+
+* correctly setup tests ([2f44baa](https://github.com/majksa-dev/api-gateway/commit/2f44baab9fdeaca7843acaf8a6d1115efd4aab7b))
+* **deps:** bump testing-utils from 0.1.4 to 0.1.5 ([60eed0c](https://github.com/majksa-dev/api-gateway/commit/60eed0ccfcc21906ef8f0d6c96ca857903fe4f9e))
+* remove lint pr action ([879c3ee](https://github.com/majksa-dev/api-gateway/commit/879c3ee4e8418fa823acb212f527eafbeec5a39c))
+* run tests setup with --release ([1d088ae](https://github.com/majksa-dev/api-gateway/commit/1d088aec40b0487ca0610a049644e163b89797b8))
+
 ## [0.3.1](https://github.com/majksa-dev/api-gateway/compare/v0.3.0...v0.3.1) (2024-06-28)
 
 
