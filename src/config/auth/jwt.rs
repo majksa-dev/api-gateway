@@ -16,12 +16,16 @@ pub struct Claim {
     pub header: String,
 }
 
-impl From<&AppConfig> for auth::jwt::config::App {
+impl From<&AppConfig> for Option<auth::jwt::config::App> {
     fn from(value: &AppConfig) -> Self {
-        match &value.jwt {
-            Some(rules) => Self::new(rules.iter().map(auth::jwt::config::Auth::from).collect()),
-            None => Self::new(vec![]),
-        }
+        Some(auth::jwt::config::App::new(
+            value
+                .jwt
+                .as_ref()?
+                .iter()
+                .map(auth::jwt::config::Auth::from)
+                .collect(),
+        ))
     }
 }
 

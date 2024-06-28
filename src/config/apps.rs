@@ -74,7 +74,7 @@ impl From<&Apps> for auth::basic::Builder {
             .apps
             .iter()
             .filter_map(|(name, app)| {
-                Into::<Option<auth::basic::config::Auth>>::into(app).map(|app| (name.clone(), app))
+                Option::<auth::basic::config::Auth>::from(app).map(|app| (name.clone(), app))
             })
             .collect()
     }
@@ -85,7 +85,9 @@ impl From<&Apps> for auth::jwt::Builder {
         value
             .apps
             .iter()
-            .map(|(name, app)| (name.clone(), app.into()))
+            .filter_map(|(name, app)| {
+                Option::<auth::jwt::config::App>::from(app).map(|app| (name.clone(), app))
+            })
             .collect()
     }
 }

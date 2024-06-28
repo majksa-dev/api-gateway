@@ -23,6 +23,83 @@ use wiremock::{
     Mock, MockServer, ResponseTemplate,
 };
 
+#[utils::test(setup = before_each, teardown = after_each)]
+async fn should_succeed(ctx: Context) -> Context {
+    let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
+        .header("X-Real-IP", "1.2.3.4")
+        .header("X-Api-Token", "token")
+        .header("Origin", "http://localhost:3000")
+        .header("Host", "app")
+        .await
+        .unwrap()
+        .status();
+    assert_eq!(status as u16, 200);
+    ctx
+}
+
+#[utils::test(setup = before_each, teardown = after_each)]
+async fn should_fail_when_calling_without_host(ctx: Context) -> Context {
+    let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
+        .await
+        .unwrap()
+        .status();
+    assert_eq!(status as u16, 502);
+    ctx
+}
+
+#[utils::test(setup = before_each, teardown = after_each)]
+async fn should_fail_when_calling_valid_endpoint_without_token(ctx: Context) -> Context {
+    let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
+        .header("X-Real-IP", "1.2.3.4")
+        .header("Origin", "http://localhost:3000")
+        .header("Host", "app")
+        .await
+        .unwrap()
+        .status();
+    assert_eq!(status as u16, 401);
+    ctx
+}
+
+#[utils::test(setup = before_each, teardown = after_each)]
+async fn should_succeed_when_calling_valid_endpoint_without_ip(ctx: Context) -> Context {
+    let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
+        .header("X-Api-Token", "token")
+        .header("Origin", "http://localhost:3000")
+        .header("Host", "app")
+        .await
+        .unwrap()
+        .status();
+    assert_eq!(status as u16, 200);
+    ctx
+}
+
+#[utils::test(setup = before_each, teardown = after_each)]
+async fn should_fail_when_calling_valid_endpoint_without_origin(ctx: Context) -> Context {
+    let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
+        .header("X-Real-IP", "1.2.3.4")
+        .header("X-Api-Token", "token")
+        .header("Host", "app")
+        .await
+        .unwrap()
+        .status();
+    assert_eq!(status as u16, 403);
+    ctx
+}
+
+#[utils::test(setup = before_each, teardown = after_each)]
+async fn should_fail_when_calling_invalid_endpoint(ctx: Context) -> Context {
+    let status = surf::get(format!("http://127.0.0.1:{}/unknown", &ctx.app))
+        .header("X-Real-IP", "1.2.3.4")
+        .header("X-Api-Token", "token")
+        .header("Origin", "http://localhost:3000")
+        .header("Host", "app")
+        .await
+        .unwrap()
+        .status();
+    assert_eq!(status as u16, 403);
+    ctx
+}
+
 fn single_server_config(ports: &[u16]) -> serde_json::Value {
     json!({
         "apps": {
@@ -139,81 +216,4 @@ async fn after_each(mut ctx: Context) {
         .stop()
         .await
         .expect("Redis could not be stopped");
-}
-
-#[utils::test(setup = before_each, teardown = after_each)]
-async fn should_succeed(ctx: Context) -> Context {
-    let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
-        .header("X-Real-IP", "1.2.3.4")
-        .header("X-Api-Token", "token")
-        .header("Origin", "http://localhost:3000")
-        .header("Host", "app")
-        .await
-        .unwrap()
-        .status();
-    assert_eq!(status as u16, 200);
-    ctx
-}
-
-#[utils::test(setup = before_each, teardown = after_each)]
-async fn should_fail_when_calling_without_host(ctx: Context) -> Context {
-    let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
-        .await
-        .unwrap()
-        .status();
-    assert_eq!(status as u16, 502);
-    ctx
-}
-
-#[utils::test(setup = before_each, teardown = after_each)]
-async fn should_fail_when_calling_valid_endpoint_without_token(ctx: Context) -> Context {
-    let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
-        .header("X-Real-IP", "1.2.3.4")
-        .header("Origin", "http://localhost:3000")
-        .header("Host", "app")
-        .await
-        .unwrap()
-        .status();
-    assert_eq!(status as u16, 401);
-    ctx
-}
-
-#[utils::test(setup = before_each, teardown = after_each)]
-async fn should_fail_when_calling_valid_endpoint_without_ip(ctx: Context) -> Context {
-    let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
-        .header("X-Api-Token", "token")
-        .header("Origin", "http://localhost:3000")
-        .header("Host", "app")
-        .await
-        .unwrap()
-        .status();
-    assert_eq!(status as u16, 400);
-    ctx
-}
-
-#[utils::test(setup = before_each, teardown = after_each)]
-async fn should_fail_when_calling_valid_endpoint_without_origin(ctx: Context) -> Context {
-    let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
-        .header("X-Real-IP", "1.2.3.4")
-        .header("X-Api-Token", "token")
-        .header("Host", "app")
-        .await
-        .unwrap()
-        .status();
-    assert_eq!(status as u16, 400);
-    ctx
-}
-
-#[utils::test(setup = before_each, teardown = after_each)]
-async fn should_fail_when_calling_invalid_endpoint(ctx: Context) -> Context {
-    let status = surf::get(format!("http://127.0.0.1:{}/unknown", &ctx.app))
-        .header("X-Real-IP", "1.2.3.4")
-        .header("X-Api-Token", "token")
-        .header("Origin", "http://localhost:3000")
-        .header("Host", "app")
-        .await
-        .unwrap()
-        .status();
-    assert_eq!(status as u16, 403);
-    ctx
 }
