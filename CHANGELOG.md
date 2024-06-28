@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/majksa-dev/api-gateway/compare/v0.3.0...v0.3.1) (2024-06-28)
+
+
+### Bug Fixes
+
+* deploy only to linux/amd64 platform ([ea15af7](https://github.com/majksa-dev/api-gateway/commit/ea15af7445ca05af3f57fe0c68325e0dbb5caba1))
+
 ## [0.3.0](https://github.com/majksa-dev/api-gateway/compare/v0.2.0...v0.3.0) (2024-06-28)
 
 
