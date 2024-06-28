@@ -1,0 +1,4 @@
+experimental = ["setup-scripts"]
+
+[script.my-script]
+command = 'cargo build'
