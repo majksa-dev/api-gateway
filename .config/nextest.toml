@@ -1,4 +1,8 @@
 experimental = ["setup-scripts"]
 
-[script.my-script]
+[script.build-app]
 command = 'cargo build'
+
+[[profile.default.scripts]]
+filter = 'deps(api-gateway)'
+setup = 'build-app'
