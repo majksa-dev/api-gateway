@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.4](https://github.com/majksa-dev/api-gateway/compare/v0.3.3...v0.3.4) (2024-07-04)
+
+
+### Bug Fixes
+
+* **deps:** bump gateway from 0.5.4 to 0.6.0 ([ba87f89](https://github.com/majksa-dev/api-gateway/commit/ba87f8927b3177cf24190e4d919f99b2ccf157ee))
+
 ## [0.3.3](https://github.com/majksa-dev/api-gateway/compare/v0.3.2...v0.3.3) (2024-07-04)
 
 
