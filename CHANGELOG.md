@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.3](https://github.com/majksa-dev/api-gateway/compare/v0.3.2...v0.3.3) (2024-07-04)
+
+
+### Bug Fixes
+
+* **deps:** bump serde_json from 1.0.118 to 1.0.120 ([87530a3](https://github.com/majksa-dev/api-gateway/commit/87530a3a1ffd6f18086eeb1c8743a00ab27ab80b))
+
 ## [0.3.2](https://github.com/majksa-dev/api-gateway/compare/v0.3.1...v0.3.2) (2024-06-28)
 
 
