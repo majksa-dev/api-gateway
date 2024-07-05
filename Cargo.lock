@@ -1459,8 +1459,8 @@ dependencies = [
 
 [[package]]
 name = "gateway"
-version = "0.6.0"
-source = "git+https://github.com/majksa-dev/rust-gateway?tag=0.6.0#45dd702caa1d02b828ce30d3f42effe4c28e1907"
+version = "0.6.2"
+source = "git+https://github.com/majksa-dev/rust-gateway?tag=0.6.2#ce48138e32d1bb3db56d58462c7029454f0afb82"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1876,7 +1876,7 @@ dependencies = [
  "httpdate",
  "itoa",
  "pin-project-lite",
- "socket2 0.5.7",
+ "socket2 0.4.10",
  "tokio",
  "tower-service",
  "tracing",
@@ -2783,7 +2783,7 @@ dependencies = [
  "serde",
  "serde_yaml",
  "sfv",
- "socket2 0.5.7",
+ "socket2 0.4.10",
  "structopt",
  "thread_local",
  "tokio",
@@ -2834,7 +2834,7 @@ dependencies = [
  "arrayvec",
  "hashbrown 0.14.5",
  "parking_lot",
- "rand 0.8.5",
+ "rand 0.7.3",
 ]
 
 [[package]]
