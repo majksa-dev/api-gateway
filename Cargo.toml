@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 essentials = { tag = "0.3.6", git = "https://github.com/majksa-dev/rust-essentials" }
-gateway = { tag = "0.6.0", features = ["middlewares"], git = "https://github.com/majksa-dev/rust-gateway"}
+gateway = { tag = "0.6.3", features = ["middlewares"], git = "https://github.com/majksa-dev/rust-gateway"}
 chrono = { version = "0.4.38", default-features = false, features = ["clock", "serde"] }
 derive_more = "0.99.18"
 futures-util = { version = "0.3.17", default-features = false, features = ["std"] }

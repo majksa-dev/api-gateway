@@ -419,9 +419,9 @@ checksum = "8b75356056920673b02621b35afd0f7dda9306d03c79a30f5c56c44cf256e3de"
 
 [[package]]
 name = "async-trait"
-version = "0.1.80"
+version = "0.1.81"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c6fa2087f2753a7da8cc1c0dbfcf89579dd57458e36769de5ac750b4671737ca"
+checksum = "6e0c28dcc82d7c8ead5cb13beb15405b57b8546e93215673ff8ca0349a028107"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1459,8 +1459,8 @@ dependencies = [
 
 [[package]]
 name = "gateway"
-version = "0.6.0"
-source = "git+https://github.com/majksa-dev/rust-gateway?tag=0.6.0#45dd702caa1d02b828ce30d3f42effe4c28e1907"
+version = "0.6.3"
+source = "git+https://github.com/majksa-dev/rust-gateway?tag=0.6.3#b5d6a16baf6314b7250ca3f4446510f85ef7185c"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1876,7 +1876,7 @@ dependencies = [
  "httpdate",
  "itoa",
  "pin-project-lite",
- "socket2 0.5.7",
+ "socket2 0.4.10",
  "tokio",
  "tower-service",
  "tracing",
@@ -2130,8 +2130,8 @@ dependencies = [
 
 [[package]]
 name = "io"
-version = "0.2.2"
-source = "git+https://github.com/majksa-dev/rust-io?tag=0.2.2#83b649cf607663776bc022f0d4ea0bedf30150b7"
+version = "0.3.0"
+source = "git+https://github.com/majksa-dev/rust-io?tag=0.3.0#9d3222b268ddeb7826004baeb72464fc589d10d2"
 dependencies = [
  "chrono",
  "derive_more",
@@ -2139,6 +2139,7 @@ dependencies = [
  "futures-util",
  "libc",
  "rand 0.8.5",
+ "sendfile",
  "serde",
  "serde_json",
  "slab",
@@ -2783,7 +2784,7 @@ dependencies = [
  "serde",
  "serde_yaml",
  "sfv",
- "socket2 0.5.7",
+ "socket2 0.4.10",
  "structopt",
  "thread_local",
  "tokio",
@@ -2834,7 +2835,7 @@ dependencies = [
  "arrayvec",
  "hashbrown 0.14.5",
  "parking_lot",
- "rand 0.8.5",
+ "rand 0.7.3",
 ]
 
 [[package]]
@@ -3634,6 +3635,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "388a1df253eca08550bef6c72392cfe7c30914bf41df5269b68cbd6ff8f570a3"
 
 [[package]]
+name = "sendfile"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d64d429eab67399587c3737a2da1fb9e635b85d355b495c3ddb757f1f4ee84c3"
+dependencies = [
+ "libc",
+ "log",
+]
+
+[[package]]
 name = "sentry"
 version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3715,9 +3726,9 @@ dependencies = [
 
 [[package]]
 name = "serde"
-version = "1.0.203"
+version = "1.0.204"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7253ab4de971e72fb7be983802300c30b5a7f0c2e56fab8abfc6a214307c0094"
+checksum = "bc76f558e0cbb2a839d37354c575f1dc3fdc6546b5be373ba43d95f231bf7c12"
 dependencies = [
  "serde_derive",
 ]
@@ -3735,9 +3746,9 @@ dependencies = [
 
 [[package]]
 name = "serde_derive"
-version = "1.0.203"
+version = "1.0.204"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "500cbc0ebeb6f46627f50f3f5811ccf6bf00643be300b4c3eabc0ef55dc5b5ba"
+checksum = "e0cd7e117be63d3c3678776753929474f3b04a43a080c744d6b0ae2a8c28e222"
 dependencies = [
  "proc-macro2",
  "quote",
