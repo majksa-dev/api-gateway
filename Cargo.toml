@@ -21,7 +21,7 @@ structopt = "0.3.26"
 redis = "0.25.4"
 http = "1.1.0"
 envy = "0.4.2"
-tokio = { version = "1.38", features = ["full"] }
+tokio = { version = "1.39", features = ["full"] }
 bb8-redis = "0.15.0"
 anyhow = "1.0.86"
 url = "2.5.2"
