@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/majksa-dev/api-gateway/compare/v0.3.5...v0.4.0) (2024-07-28)
+
+
+### Features
+
+* **auth:** implement endpoint based auth ([a1714cd](https://github.com/majksa-dev/api-gateway/commit/a1714cdd060481dddcbf2434971dee77482806f3))
+
 ## [0.3.5](https://github.com/majksa-dev/api-gateway/compare/v0.3.4...v0.3.5) (2024-07-28)
 
 
