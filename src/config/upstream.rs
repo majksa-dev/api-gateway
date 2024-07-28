@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use std::net::{AddrParseError, SocketAddr};
+use std::fmt::Display;
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct Upstream {
@@ -20,10 +20,8 @@ impl Upstream {
     }
 }
 
-impl TryFrom<&Upstream> for SocketAddr {
-    type Error = AddrParseError;
-
-    fn try_from(value: &Upstream) -> Result<Self, Self::Error> {
-        Ok(SocketAddr::new(value.host.parse()?, value.port))
+impl Display for Upstream {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}:{}", self.host, self.port)
     }
 }

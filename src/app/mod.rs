@@ -1,20 +1,14 @@
-use std::{
-    net::{IpAddr, SocketAddr},
-    path::Path,
-};
-
 use crate::config::apps::Apps;
+use crate::env::Env;
 use anyhow::{Context, Result};
 use bb8_redis::{bb8::Pool, RedisConnectionManager};
-use essentials::error;
 use gateway::{
     self, auth, cache, cors, http::HeaderMapExt, rate_limit, tcp, ParamRouterBuilder, Request,
     Server,
 };
 use http::header;
+use std::{net::IpAddr, path::Path};
 use tokio::fs;
-
-use crate::env::Env;
 
 async fn create_redis(connection: String) -> Result<Pool<RedisConnectionManager>> {
     let manager = RedisConnectionManager::new(connection)
@@ -49,11 +43,11 @@ pub async fn build(env: Env) -> Result<Server> {
             config
                 .apps
                 .iter()
-                .filter_map(|(name, app)| {
-                    TryInto::<SocketAddr>::try_into(&app.upstream)
-                        .map_err(|e| error!("Failed to create upstream: {}", e))
-                        .ok()
-                        .map(|val| (name.clone(), tcp::config::Connection::new(val)))
+                .map(|(name, app)| {
+                    (
+                        name.clone(),
+                        tcp::config::Connection::new(app.upstream.to_string()),
+                    )
                 })
                 .collect(),
         ),
