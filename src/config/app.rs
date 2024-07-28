@@ -4,7 +4,7 @@ use gateway::{auth, cache, cors, rate_limit};
 use serde::Deserialize;
 
 use super::{
-    auth::{basic, jwt, endpoint, Auth},
+    auth::{basic, endpoint, jwt, Auth},
     endpoint::Endpoint,
     quota::Quota,
     upstream::Upstream,
