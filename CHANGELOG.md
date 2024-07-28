@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.5](https://github.com/majksa-dev/api-gateway/compare/v0.3.4...v0.3.5) (2024-07-28)
+
+
+### Bug Fixes
+
+* **deps:** bump the dependencies group with 5 updates ([ce3240a](https://github.com/majksa-dev/api-gateway/commit/ce3240ab3ae5f5f655d7da40392534c97c7d15c8))
+* update api usage of gateway tcp upstream ([8a40926](https://github.com/majksa-dev/api-gateway/commit/8a40926856b9924a934ab7cc75417fde565e27fc))
+
 ## [0.3.4](https://github.com/majksa-dev/api-gateway/compare/v0.3.3...v0.3.4) (2024-07-04)
 
 
