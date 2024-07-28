@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 essentials = { tag = "0.3.6", git = "https://github.com/majksa-dev/rust-essentials" }
-gateway = { tag = "0.6.0", features = ["middlewares"], git = "https://github.com/majksa-dev/rust-gateway"}
+gateway = { tag = "0.7", features = ["middlewares"], git = "https://github.com/majksa-dev/rust-gateway"}
 chrono = { version = "0.4.38", default-features = false, features = ["clock", "serde"] }
 derive_more = "0.99.18"
 futures-util = { version = "0.3.17", default-features = false, features = ["std"] }
@@ -21,7 +21,7 @@ structopt = "0.3.26"
 redis = "0.25.4"
 http = "1.1.0"
 envy = "0.4.2"
-tokio = { version = "1.38", features = ["full"] }
+tokio = { version = "1.39", features = ["full"] }
 bb8-redis = "0.15.0"
 anyhow = "1.0.86"
 url = "2.5.2"
@@ -29,4 +29,4 @@ url = "2.5.2"
 [dev-dependencies]
 testing-utils = { tag = "0.1.5", git = "https://github.com/majksa-dev/rust-testing-utils" }
 pretty_assertions = "1.4.0"
-wiremock = "0.6.0"
+wiremock = "0.6.1"
