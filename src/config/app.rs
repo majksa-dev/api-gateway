@@ -4,7 +4,7 @@ use gateway::{auth, cache, cors, rate_limit};
 use serde::Deserialize;
 
 use super::{
-    auth::{basic, jwt, Auth},
+    auth::{basic, jwt, endpoint, Auth},
     endpoint::Endpoint,
     quota::Quota,
     upstream::Upstream,
@@ -18,6 +18,7 @@ pub struct AppConfigRaw {
     pub quota: Option<Quota>,
     pub jwt: Option<Vec<jwt::Auth>>,
     pub basic: Option<basic::Auth>,
+    pub endpoint_auth: Option<endpoint::App>,
 }
 
 #[derive(Debug, Clone)]
@@ -29,6 +30,7 @@ pub struct AppConfig {
     pub quota: Option<Quota>,
     pub jwt: Option<Vec<jwt::Auth>>,
     pub basic: Option<basic::Auth>,
+    pub endpoint_auth: Option<endpoint::App>,
 }
 
 impl AppConfig {
@@ -41,6 +43,7 @@ impl AppConfig {
             quota: data.quota,
             jwt: data.jwt,
             basic: data.basic,
+            endpoint_auth: data.endpoint_auth,
         }
     }
 }

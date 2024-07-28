@@ -1,4 +1,5 @@
 use essentials::{debug, info};
+use http::header;
 use pretty_assertions::assert_eq;
 use serde_json::json;
 use std::{
@@ -20,20 +21,21 @@ use testing_utils::{
 };
 use wiremock::{
     matchers::{method, path},
-    Mock, MockServer, ResponseTemplate,
+    Mock, MockServer, Request, Respond, ResponseTemplate,
 };
 
 #[utils::test(setup = before_each, teardown = after_each)]
 async fn should_succeed(ctx: Context) -> Context {
-    let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
+    let mut response = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
+        .header("Authorization", "Bearer token")
         .header("X-Real-IP", "1.2.3.4")
         .header("X-Api-Token", "token")
         .header("Origin", "http://localhost:3000")
         .header("Host", "app")
         .await
-        .unwrap()
-        .status();
-    assert_eq!(status as u16, 200);
+        .unwrap();
+    assert_eq!(response.status() as u16, 200);
+    assert_eq!(response.body_string().await.unwrap(), "john@doe.com");
     ctx
 }
 
@@ -50,6 +52,7 @@ async fn should_fail_when_calling_without_host(ctx: Context) -> Context {
 #[utils::test(setup = before_each, teardown = after_each)]
 async fn should_fail_when_calling_valid_endpoint_without_token(ctx: Context) -> Context {
     let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
+        .header("Authorization", "Bearer token")
         .header("X-Real-IP", "1.2.3.4")
         .header("Origin", "http://localhost:3000")
         .header("Host", "app")
@@ -63,6 +66,7 @@ async fn should_fail_when_calling_valid_endpoint_without_token(ctx: Context) -> 
 #[utils::test(setup = before_each, teardown = after_each)]
 async fn should_succeed_when_calling_valid_endpoint_without_ip(ctx: Context) -> Context {
     let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
+        .header("Authorization", "Bearer token")
         .header("X-Api-Token", "token")
         .header("Origin", "http://localhost:3000")
         .header("Host", "app")
@@ -76,6 +80,7 @@ async fn should_succeed_when_calling_valid_endpoint_without_ip(ctx: Context) -> 
 #[utils::test(setup = before_each, teardown = after_each)]
 async fn should_fail_when_calling_valid_endpoint_without_origin(ctx: Context) -> Context {
     let status = surf::get(format!("http://127.0.0.1:{}/hello", &ctx.app))
+        .header("Authorization", "Bearer token")
         .header("X-Real-IP", "1.2.3.4")
         .header("X-Api-Token", "token")
         .header("Host", "app")
@@ -89,6 +94,22 @@ async fn should_fail_when_calling_valid_endpoint_without_origin(ctx: Context) ->
 #[utils::test(setup = before_each, teardown = after_each)]
 async fn should_fail_when_calling_invalid_endpoint(ctx: Context) -> Context {
     let status = surf::get(format!("http://127.0.0.1:{}/unknown", &ctx.app))
+        .header("Authorization", "Bearer token")
+        .header("X-Real-IP", "1.2.3.4")
+        .header("X-Api-Token", "token")
+        .header("Origin", "http://localhost:3000")
+        .header("Host", "app")
+        .await
+        .unwrap()
+        .status();
+    assert_eq!(status as u16, 403);
+    ctx
+}
+
+#[utils::test(setup = before_each, teardown = after_each)]
+async fn should_fail_when_calling_endpoint_without_required_roles(ctx: Context) -> Context {
+    let status = surf::get(format!("http://127.0.0.1:{}/private", &ctx.app))
+        .header("Authorization", "Bearer token")
         .header("X-Real-IP", "1.2.3.4")
         .header("X-Api-Token", "token")
         .header("Origin", "http://localhost:3000")
@@ -114,16 +135,83 @@ fn single_server_config(ports: &[u16]) -> serde_json::Value {
                         "origins": ["http://localhost:3000"]
                     }
                 ],
+                "endpoint_auth": {
+                    "rules": [{
+                        "url": format!("http://localhost:{}/userinfo", ports[1]),
+                        "claims": [{
+                            "claim": "extra.email",
+                            "header": "X-Email"
+                        }],
+                        "roles_claim": {
+                            "claim": "security.roles",
+                            "mapping": "name"
+                        }
+                    }],
+                    "roles": [ "ROLE1" ]
+                },
                 "endpoints": [
                     {
                         "path": "/hello",
                         "id": "hello",
-                        "method": "GET"
+                        "method": "GET",
+                        "roles": [ "ROLE2" ]
+                    },
+                    {
+                        "path": "/secret",
+                        "id": "secret",
+                        "method": "GET",
+                        "roles": [ "ADMIN" ]
                     }
                 ]
             }
         }
     })
+}
+
+struct RespondWithUserInfo;
+
+impl Respond for RespondWithUserInfo {
+    fn respond(&self, request: &Request) -> ResponseTemplate {
+        let token = request
+            .headers
+            .get(header::AUTHORIZATION)
+            .unwrap()
+            .to_str()
+            .unwrap();
+        debug!(
+            token,
+            expected = "Bearer token",
+            result = token != "Bearer token",
+            ""
+        );
+        if token != "Bearer token" {
+            ResponseTemplate::new(401)
+        } else {
+            ResponseTemplate::new(200).set_body_string(
+                json!({
+                    "security": {
+                        "roles": [
+                            { "name": "ROLE1" },
+                            { "name": "ROLE2" }
+                        ]
+                    },
+                    "extra": {
+                        "email": "john@doe.com"
+                    }
+                })
+                .to_string(),
+            )
+        }
+    }
+}
+
+struct RespondWithEmail;
+
+impl Respond for RespondWithEmail {
+    fn respond(&self, req: &Request) -> wiremock::ResponseTemplate {
+        let email = req.headers.get("X-Email").unwrap().to_str().unwrap();
+        ResponseTemplate::new(200).set_body_string(email)
+    }
 }
 
 struct Context {
@@ -132,6 +220,7 @@ struct Context {
     redis_cache: ContainerAsync<GenericImage>,
     redis_rate_limiter: ContainerAsync<GenericImage>,
     _mock_server: MockServer,
+    _auth_server: MockServer,
 }
 
 async fn before_each() -> Context {
@@ -151,17 +240,31 @@ async fn before_each() -> Context {
         .await
         .expect("Redis started");
     let redis_rate_limiter_port = redis_rate_limiter.get_host_port_ipv4(6379).await.unwrap();
-    let listener = TcpListener::bind(SocketAddr::from(([127, 0, 0, 1], 0))).unwrap();
-    let origin = listener.local_addr().unwrap().port();
-    let mock_server = MockServer::builder().listener(listener).start().await;
-    Mock::given(method("GET"))
-        .and(path("/hello"))
-        .respond_with(ResponseTemplate::new(200))
-        .mount(&mock_server)
-        .await;
+    let (mock_server, origin) = {
+        let listener = TcpListener::bind(SocketAddr::from(([127, 0, 0, 1], 0))).unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let server = MockServer::builder().listener(listener).start().await;
+        Mock::given(method("GET"))
+            .and(path("/hello"))
+            .respond_with(RespondWithEmail)
+            .mount(&server)
+            .await;
+        (server, port)
+    };
+    let (auth_server, auth_port) = {
+        let listener = TcpListener::bind(SocketAddr::from(([127, 0, 0, 1], 0))).unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let server = MockServer::builder().listener(listener).start().await;
+        Mock::given(method("GET"))
+            .and(path("/userinfo"))
+            .respond_with(RespondWithUserInfo)
+            .mount(&server)
+            .await;
+        (server, port)
+    };
 
     let ports = get_random_ports(2);
-    let config = single_server_config(&[origin]);
+    let config = single_server_config(&[origin, auth_port]);
     let temp = fs::TempDir::new().unwrap();
     let input_file = temp.child("config.json");
     input_file.touch().unwrap();
@@ -196,6 +299,7 @@ async fn before_each() -> Context {
                     redis_cache,
                     redis_rate_limiter,
                     _mock_server: mock_server,
+                    _auth_server: auth_server,
                 };
             }
         }

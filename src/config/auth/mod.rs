@@ -1,4 +1,5 @@
 pub mod basic;
+pub mod endpoint;
 pub mod jwt;
 
 use super::quota::Quota;

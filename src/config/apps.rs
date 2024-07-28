@@ -58,12 +58,7 @@ impl From<&Apps> for cache::Builder {
         value
             .apps
             .iter()
-            .map(|(name, app)| {
-                (
-                    name.clone(),
-                    HashMap::<String, cache::config::Endpoint>::from(app),
-                )
-            })
+            .map(|(name, app)| (name.clone(), HashMap::<_, _>::from(app)))
             .collect()
     }
 }
@@ -73,9 +68,7 @@ impl From<&Apps> for auth::basic::Builder {
         value
             .apps
             .iter()
-            .filter_map(|(name, app)| {
-                Option::<auth::basic::config::Auth>::from(app).map(|app| (name.clone(), app))
-            })
+            .filter_map(|(name, app)| Option::<_>::from(app).map(|app| (name.clone(), app)))
             .collect()
     }
 }
@@ -85,9 +78,17 @@ impl From<&Apps> for auth::jwt::Builder {
         value
             .apps
             .iter()
-            .filter_map(|(name, app)| {
-                Option::<auth::jwt::config::App>::from(app).map(|app| (name.clone(), app))
-            })
+            .filter_map(|(name, app)| Option::<_>::from(app).map(|app| (name.clone(), app)))
+            .collect()
+    }
+}
+
+impl From<&Apps> for auth::endpoint::Builder {
+    fn from(value: &Apps) -> Self {
+        value
+            .apps
+            .iter()
+            .filter_map(|(name, app)| Option::<_>::from(app).map(|app| (name.clone(), app)))
             .collect()
     }
 }

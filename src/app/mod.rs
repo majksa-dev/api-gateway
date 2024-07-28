@@ -66,8 +66,9 @@ pub async fn build(env: Env) -> Result<Server> {
     )
     .register_middleware(3, auth::basic::Builder::build((&config).into()))
     .register_middleware(4, auth::jwt::Builder::build((&config).into()))
+    .register_middleware(5, auth::endpoint::Builder::build((&config).into()))
     .register_middleware(
-        5,
+        6,
         cache::Builder::build(
             (&config).into(),
             cache::datastore::RedisDatastore::new(redis_cache),
