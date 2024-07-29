@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1](https://github.com/majksa-dev/api-gateway/compare/v0.4.0...v0.4.1) (2024-07-29)
+
+
+### Bug Fixes
+
+* **deps:** bump serde_json in the dependencies group ([ff3413f](https://github.com/majksa-dev/api-gateway/commit/ff3413fe766a5f5a6480a9aae6a7b68df80732b6))
+* **deps:** bump version ([ef528ac](https://github.com/majksa-dev/api-gateway/commit/ef528acfd28cb052e0997c4e1b43276bc541a996))
+
 ## [0.4.0](https://github.com/majksa-dev/api-gateway/compare/v0.3.5...v0.4.0) (2024-07-28)
 
 
