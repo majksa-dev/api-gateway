@@ -26,11 +26,12 @@ async fn load_config(config_path: impl AsRef<Path>) -> Result<Apps> {
     Apps::new(config_data).with_context(|| "Failed to parse config file")
 }
 
-fn peer_key_from_host() -> impl Fn(&Request) -> Option<String> + Send + Sync + 'static {
+fn peer_key_from_host(
+) -> impl Fn(&Request) -> Option<(String, Option<String>)> + Send + Sync + 'static {
     |req: &Request| {
         req.header(header::HOST)
             .and_then(|host| host.to_str().ok())
-            .map(|host| host.to_string())
+            .map(|host| (host.to_string(), None))
     }
 }
 

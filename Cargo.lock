@@ -209,7 +209,7 @@ dependencies = [
  "http 1.1.0",
  "pretty_assertions",
  "rand 0.8.5",
- "redis",
+ "redis 0.26.0",
  "regex",
  "serde",
  "serde_json",
@@ -220,6 +220,12 @@ dependencies = [
  "url",
  "wiremock",
 ]
+
+[[package]]
+name = "arc-swap"
+version = "1.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "69f7f8c3906b62b754cd5326047894316021dcfe5a194c8ea52bdd94934a3457"
 
 [[package]]
 name = "arrayvec"
@@ -510,7 +516,7 @@ checksum = "7eb4f141b33a750b5f667c445bd8588de10b8f2b045cd2aabc040ca746fb53ae"
 dependencies = [
  "async-trait",
  "bb8",
- "redis",
+ "redis 0.25.4",
 ]
 
 [[package]]
@@ -1498,8 +1504,8 @@ dependencies = [
 
 [[package]]
 name = "gateway"
-version = "0.7.0"
-source = "git+https://github.com/majksa-dev/rust-gateway?tag=0.7#6aa5f6520693a0fa7f854f37b6c3231f058fa1e8"
+version = "0.8.1"
+source = "git+https://github.com/majksa-dev/rust-gateway?tag=0.8.1#bf78134711484418c92b5b4f37b72dabdf5555a0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2514,9 +2520,9 @@ dependencies = [
 
 [[package]]
 name = "num-bigint"
-version = "0.4.5"
+version = "0.4.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c165a9ab64cf766f73521c0dd2cfdff64f488b8f0b3e621face3462d3db536d7"
+checksum = "a5e44f723f1133c9deac646763579fdb3ac745e418f2a7af9cd0c431da1f20b9"
 dependencies = [
  "num-integer",
  "num-traits",
@@ -3215,10 +3221,25 @@ dependencies = [
  "percent-encoding",
  "pin-project-lite",
  "ryu",
- "sha1_smol",
- "socket2 0.5.7",
  "tokio",
  "tokio-util",
+ "url",
+]
+
+[[package]]
+name = "redis"
+version = "0.26.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8cc5b667390cb038bc65fc4b18c06e2550469f7e06a02d886f1a018a11f63563"
+dependencies = [
+ "arc-swap",
+ "combine",
+ "itoa",
+ "num-bigint",
+ "percent-encoding",
+ "ryu",
+ "sha1_smol",
+ "socket2 0.5.7",
  "url",
 ]
 
