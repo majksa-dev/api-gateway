@@ -7,22 +7,22 @@ edition = "2021"
 
 [dependencies]
 essentials = { tag = "0.3.6", git = "https://github.com/majksa-dev/rust-essentials" }
-gateway = { tag = "0.8.1", features = ["middlewares"], git = "https://github.com/majksa-dev/rust-gateway"}
+gateway = { tag = "0.8.2", features = ["middlewares"], git = "https://github.com/majksa-dev/rust-gateway"}
 chrono = { version = "0.4.38", default-features = false, features = ["clock", "serde"] }
 derive_more = "0.99.18"
 futures-util = { version = "0.3.17", default-features = false, features = ["std"] }
 rand = "0.8.5"
 slab = "0.4.9"
 serde = "1.0.203"
-serde_json = "1.0.121"
+serde_json = "1.0.122"
 regex = "1.10.5"
 async-trait = "0.1.80"
 structopt = "0.3.26"
-redis = "0.26.0"
+redis = "0.26.1"
 http = "1.1.0"
 envy = "0.4.2"
 tokio = { version = "1.39", features = ["full"] }
-bb8-redis = "0.15.0"
+bb8-redis = "0.16.0"
 anyhow = "1.0.86"
 url = "2.5.2"
 
