@@ -199,9 +199,9 @@ version = "0.4.0"
 dependencies = [
  "anyhow",
  "async-trait",
- "bb8-redis",
+ "bb8-redis 0.16.0",
  "chrono",
- "derive_more",
+ "derive_more 1.0.0",
  "envy",
  "essentials",
  "futures-util",
@@ -209,7 +209,7 @@ dependencies = [
  "http 1.1.0",
  "pretty_assertions",
  "rand 0.8.5",
- "redis 0.26.0",
+ "redis 0.26.1",
  "regex",
  "serde",
  "serde_json",
@@ -517,6 +517,17 @@ dependencies = [
  "async-trait",
  "bb8",
  "redis 0.25.4",
+]
+
+[[package]]
+name = "bb8-redis"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c6910977c026bb1d0a6b523508d1a893d6d4c2ba216355e9569d8181d92ccbe"
+dependencies = [
+ "async-trait",
+ "bb8",
+ "redis 0.26.1",
 ]
 
 [[package]]
@@ -1110,6 +1121,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "derive_more"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4a9b99b9cbbe49445b21764dc0625032a89b145a2642e67603e1c936f5458d05"
+dependencies = [
+ "derive_more-impl",
+]
+
+[[package]]
+name = "derive_more-impl"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cb7330aeadfbe296029522e6c40f315320aba36fc43a5b3632f3795348f3bd22"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.68",
+]
+
+[[package]]
 name = "diff"
 version = "0.1.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1504,13 +1535,13 @@ dependencies = [
 
 [[package]]
 name = "gateway"
-version = "0.8.1"
-source = "git+https://github.com/majksa-dev/rust-gateway?tag=0.8.1#bf78134711484418c92b5b4f37b72dabdf5555a0"
+version = "0.8.2"
+source = "git+https://github.com/majksa-dev/rust-gateway?tag=0.8.2#1fbbdaaebee2830b1a2d082a8457cc2565c1d814"
 dependencies = [
  "anyhow",
  "async-trait",
  "base64 0.22.1",
- "bb8-redis",
+ "bb8-redis 0.15.0",
  "chrono",
  "essentials",
  "futures",
@@ -2185,7 +2216,7 @@ version = "0.3.0"
 source = "git+https://github.com/majksa-dev/rust-io?tag=0.3.0#9d3222b268ddeb7826004baeb72464fc589d10d2"
 dependencies = [
  "chrono",
- "derive_more",
+ "derive_more 0.99.18",
  "essentials",
  "futures-util",
  "libc",
@@ -3228,18 +3259,24 @@ dependencies = [
 
 [[package]]
 name = "redis"
-version = "0.26.0"
+version = "0.26.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8cc5b667390cb038bc65fc4b18c06e2550469f7e06a02d886f1a018a11f63563"
+checksum = "e902a69d09078829137b4a5d9d082e0490393537badd7c91a3d69d14639e115f"
 dependencies = [
  "arc-swap",
+ "async-trait",
+ "bytes 1.6.0",
  "combine",
+ "futures-util",
  "itoa",
  "num-bigint",
  "percent-encoding",
+ "pin-project-lite",
  "ryu",
  "sha1_smol",
  "socket2 0.5.7",
+ "tokio",
+ "tokio-util",
  "url",
 ]
 
@@ -3265,9 +3302,9 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.10.5"
+version = "1.10.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b91213439dad192326a0d7c6ee3955910425f441d7038e0d6933b0aec5c4517f"
+checksum = "4219d74c6b67a3654a9fbebc4b419e22126d13d2f3c4a07ee0cb61ff79a79619"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -3807,9 +3844,9 @@ dependencies = [
 
 [[package]]
 name = "serde"
-version = "1.0.204"
+version = "1.0.205"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc76f558e0cbb2a839d37354c575f1dc3fdc6546b5be373ba43d95f231bf7c12"
+checksum = "e33aedb1a7135da52b7c21791455563facbbcc43d0f0f66165b42c21b3dfb150"
 dependencies = [
  "serde_derive",
 ]
@@ -3827,9 +3864,9 @@ dependencies = [
 
 [[package]]
 name = "serde_derive"
-version = "1.0.204"
+version = "1.0.205"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0cd7e117be63d3c3678776753929474f3b04a43a080c744d6b0ae2a8c28e222"
+checksum = "692d6f5ac90220161d6774db30c662202721e64aed9058d2c394f451261420c1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3838,9 +3875,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.121"
+version = "1.0.122"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ab380d7d9f22ef3f21ad3e6c1ebe8e4fc7a2000ccba2e4d71fc96f15b2cb609"
+checksum = "784b6203951c57ff748476b126ccb5e8e2959a5c19e5c617ab1956be3dbc68da"
 dependencies = [
  "itoa",
  "memchr",
@@ -4326,7 +4363,7 @@ dependencies = [
  "assert_fs",
  "chrono",
  "color-eyre",
- "derive_more",
+ "derive_more 0.99.18",
  "env_logger",
  "eyre",
  "futures-util",
@@ -4375,7 +4412,7 @@ source = "git+https://github.com/majksa-dev/rust-testing-utils?tag=0.1.5#8ee4e3b
 dependencies = [
  "assert_fs",
  "chrono",
- "derive_more",
+ "derive_more 0.99.18",
  "essentials",
  "futures-util",
  "rand 0.8.5",
