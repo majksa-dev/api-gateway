@@ -201,15 +201,15 @@ dependencies = [
  "async-trait",
  "bb8-redis",
  "chrono",
- "derive_more",
+ "derive_more 1.0.0",
  "envy",
- "essentials",
+ "essentials 0.3.7",
  "futures-util",
  "gateway",
  "http 1.1.0",
  "pretty_assertions",
  "rand 0.8.5",
- "redis 0.26.0",
+ "redis",
  "regex",
  "serde",
  "serde_json",
@@ -510,13 +510,13 @@ dependencies = [
 
 [[package]]
 name = "bb8-redis"
-version = "0.15.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7eb4f141b33a750b5f667c445bd8588de10b8f2b045cd2aabc040ca746fb53ae"
+checksum = "0c6910977c026bb1d0a6b523508d1a893d6d4c2ba216355e9569d8181d92ccbe"
 dependencies = [
  "async-trait",
  "bb8",
- "redis 0.25.4",
+ "redis",
 ]
 
 [[package]]
@@ -1110,6 +1110,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "derive_more"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4a9b99b9cbbe49445b21764dc0625032a89b145a2642e67603e1c936f5458d05"
+dependencies = [
+ "derive_more-impl",
+]
+
+[[package]]
+name = "derive_more-impl"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cb7330aeadfbe296029522e6c40f315320aba36fc43a5b3632f3795348f3bd22"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.68",
+]
+
+[[package]]
 name = "diff"
 version = "0.1.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1275,7 +1295,22 @@ dependencies = [
  "dotenv",
  "eyre",
  "serde",
- "serde-env",
+ "serde-env 0.1.1",
+ "tracing",
+ "tracing-panic",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "essentials"
+version = "0.3.7"
+source = "git+https://github.com/majksa-dev/rust-essentials?tag=0.3.7#b600fabb9de6a15e1ade33df84c978d7f47c6be3"
+dependencies = [
+ "color-eyre",
+ "dotenv",
+ "eyre",
+ "serde",
+ "serde-env 0.2.0",
  "tracing",
  "tracing-panic",
  "tracing-subscriber",
@@ -1504,15 +1539,15 @@ dependencies = [
 
 [[package]]
 name = "gateway"
-version = "0.8.1"
-source = "git+https://github.com/majksa-dev/rust-gateway?tag=0.8.1#bf78134711484418c92b5b4f37b72dabdf5555a0"
+version = "0.9.0"
+source = "git+https://github.com/majksa-dev/rust-gateway?tag=0.9#0f0f15f2226e0e69e42cb6e14f2eb0cbbb213a17"
 dependencies = [
  "anyhow",
  "async-trait",
  "base64 0.22.1",
  "bb8-redis",
  "chrono",
- "essentials",
+ "essentials 0.3.6",
  "futures",
  "http 1.1.0",
  "io",
@@ -1523,7 +1558,6 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2 0.10.8",
- "structopt",
  "tokio",
 ]
 
@@ -1927,7 +1961,7 @@ dependencies = [
  "httpdate",
  "itoa",
  "pin-project-lite",
- "socket2 0.5.7",
+ "socket2 0.4.10",
  "tokio",
  "tower-service",
  "tracing",
@@ -2185,8 +2219,8 @@ version = "0.3.0"
 source = "git+https://github.com/majksa-dev/rust-io?tag=0.3.0#9d3222b268ddeb7826004baeb72464fc589d10d2"
 dependencies = [
  "chrono",
- "derive_more",
- "essentials",
+ "derive_more 0.99.18",
+ "essentials 0.3.6",
  "futures-util",
  "libc",
  "rand 0.8.5",
@@ -2843,7 +2877,7 @@ dependencies = [
  "serde",
  "serde_yaml",
  "sfv",
- "socket2 0.5.7",
+ "socket2 0.4.10",
  "strum",
  "strum_macros",
  "thread_local",
@@ -3209,37 +3243,24 @@ dependencies = [
 
 [[package]]
 name = "redis"
-version = "0.25.4"
+version = "0.26.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0d7a6955c7511f60f3ba9e86c6d02b3c3f144f8c24b288d1f4e18074ab8bbec"
+checksum = "e902a69d09078829137b4a5d9d082e0490393537badd7c91a3d69d14639e115f"
 dependencies = [
+ "arc-swap",
  "async-trait",
  "bytes 1.6.0",
  "combine",
  "futures-util",
  "itoa",
+ "num-bigint",
  "percent-encoding",
  "pin-project-lite",
  "ryu",
- "tokio",
- "tokio-util",
- "url",
-]
-
-[[package]]
-name = "redis"
-version = "0.26.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8cc5b667390cb038bc65fc4b18c06e2550469f7e06a02d886f1a018a11f63563"
-dependencies = [
- "arc-swap",
- "combine",
- "itoa",
- "num-bigint",
- "percent-encoding",
- "ryu",
  "sha1_smol",
  "socket2 0.5.7",
+ "tokio",
+ "tokio-util",
  "url",
 ]
 
@@ -3265,9 +3286,9 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.10.5"
+version = "1.10.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b91213439dad192326a0d7c6ee3955910425f441d7038e0d6933b0aec5c4517f"
+checksum = "4219d74c6b67a3654a9fbebc4b419e22126d13d2f3c4a07ee0cb61ff79a79619"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -3807,9 +3828,9 @@ dependencies = [
 
 [[package]]
 name = "serde"
-version = "1.0.204"
+version = "1.0.206"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc76f558e0cbb2a839d37354c575f1dc3fdc6546b5be373ba43d95f231bf7c12"
+checksum = "5b3e4cd94123dd520a128bcd11e34d9e9e423e7e3e50425cb1b4b1e3549d0284"
 dependencies = [
  "serde_derive",
 ]
@@ -3826,10 +3847,20 @@ dependencies = [
 ]
 
 [[package]]
-name = "serde_derive"
-version = "1.0.204"
+name = "serde-env"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0cd7e117be63d3c3678776753929474f3b04a43a080c744d6b0ae2a8c28e222"
+checksum = "d13536c0c431652192b75c7d5afa83dedae98f91d7e687ff30a009e9d15284fb"
+dependencies = [
+ "anyhow",
+ "serde",
+]
+
+[[package]]
+name = "serde_derive"
+version = "1.0.206"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fabfb6138d2383ea8208cf98ccf69cdfb1aff4088460681d84189aa259762f97"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3838,9 +3869,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.121"
+version = "1.0.124"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ab380d7d9f22ef3f21ad3e6c1ebe8e4fc7a2000ccba2e4d71fc96f15b2cb609"
+checksum = "66ad62847a56b3dba58cc891acd13884b9c61138d330c0d7b6181713d4fce38d"
 dependencies = [
  "itoa",
  "memchr",
@@ -4326,7 +4357,7 @@ dependencies = [
  "assert_fs",
  "chrono",
  "color-eyre",
- "derive_more",
+ "derive_more 0.99.18",
  "env_logger",
  "eyre",
  "futures-util",
@@ -4375,8 +4406,8 @@ source = "git+https://github.com/majksa-dev/rust-testing-utils?tag=0.1.5#8ee4e3b
 dependencies = [
  "assert_fs",
  "chrono",
- "derive_more",
- "essentials",
+ "derive_more 0.99.18",
+ "essentials 0.3.6",
  "futures-util",
  "rand 0.8.5",
  "serde",
