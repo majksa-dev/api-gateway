@@ -6,27 +6,27 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-essentials = { tag = "0.3.6", git = "https://github.com/majksa-dev/rust-essentials" }
-gateway = { tag = "0.8.1", features = ["middlewares"], git = "https://github.com/majksa-dev/rust-gateway"}
+essentials = { tag = "0.3.7", git = "https://github.com/majksa-dev/rust-essentials" }
+gateway = { tag = "0.9", features = ["middlewares"], git = "https://github.com/majksa-dev/rust-gateway"}
 chrono = { version = "0.4.38", default-features = false, features = ["clock", "serde"] }
-derive_more = "0.99.18"
-futures-util = { version = "0.3.17", default-features = false, features = ["std"] }
+derive_more = "1.0.0"
+futures-util = { version = "0.3.31", default-features = false, features = ["std"] }
 rand = "0.8.5"
 slab = "0.4.9"
 serde = "1.0.203"
 serde_json = "1.0.121"
 regex = "1.10.5"
-async-trait = "0.1.80"
+async-trait = "0.1.83"
 structopt = "0.3.26"
-redis = "0.26.0"
+redis = "0.27.5"
 http = "1.1.0"
 envy = "0.4.2"
-tokio = { version = "1.39", features = ["full"] }
-bb8-redis = "0.15.0"
-anyhow = "1.0.86"
+tokio = { version = "1.40", features = ["full"] }
+bb8-redis = "0.16.0"
+anyhow = "1.0.90"
 url = "2.5.2"
 
 [dev-dependencies]
 testing-utils = { tag = "0.1.5", git = "https://github.com/majksa-dev/rust-testing-utils" }
-pretty_assertions = "1.4.0"
-wiremock = "0.6.1"
+pretty_assertions = "1.4.1"
+wiremock = "0.6.2"
